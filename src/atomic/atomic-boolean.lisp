@@ -5,16 +5,13 @@
        1
        0))
 
-(defmacro int->bool (i)
-  `(= 1 ,i))
-
 (defun make-atomic-boolean (&optional (initial nil))
   (list 
      (bool->int initial)))
 
 (defun atomic-boolean-get (ab)
   (barrier (:memory)
-    (int->bool (car ab))))
+    (plusp (car ab))))
 
 (defun atomic-boolean-set (new-value ab)
   (barrier (:memory)
@@ -31,4 +28,3 @@
      for current = (atomic-boolean-get ab)
      when (atomic-boolean-cas current new-value ab)
      return current))
-

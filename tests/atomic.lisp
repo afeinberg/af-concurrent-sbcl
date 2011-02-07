@@ -13,7 +13,7 @@
          (thread-2 (make-thread
                     (lambda ()
                       (loop 
-                         when (atomic-boolean-cas nil t toggle-switch) 
+                         when (atomic-boolean-cas t nil toggle-switch) 
                          return
                            (atomic-boolean-get-and-set nil keep-running))))))
     (atomic-boolean-set t toggle-switch)
@@ -21,5 +21,5 @@
     (join-thread thread-1)
     (is 
      (and 
-      (eq t (atomic-boolean-get toggle-switch))
+      (eq nil (atomic-boolean-get toggle-switch))
       (eq nil (atomic-boolean-get keep-running))))))
